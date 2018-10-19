@@ -1,0 +1,14 @@
+{
+  "name": "notes",
+  "version": "1.0.0",
+  "description": "Una aplicación de toma de notas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Germán Escobar",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
