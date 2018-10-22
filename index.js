@@ -1,18 +1,23 @@
 const express = require("express");
 const app = express();
 
+const logger = (req, res, next) => {
+  console.log("Nueva petición HTTP");
+  next();
+};
+
 app.set("view engine", "pug");
 app.set("views", "views");
 app.use("/static", express.static("public"));
+app.use(logger);
 
 app.get("/", (req, res) => {
   const name = req.query.name;
   const age = req.query.age;
 
-  //res.send(`<h1>Hola ${name}, tienes ${age} años</h1>`);
   const notes = [
     "Nota 1", "Nota 2", "Nota 3"
-  ]
+  ];
   res.render("index", { notes });
 });
 
@@ -22,9 +27,14 @@ app.get("/users/:name", (req, res) => {
 })
 
 app.post("/users", (req, res) => {
-  res.status(404)
+  res.status(404);
   res.set("Content-Type", "text/plain");
   res.send("No se encontró el recurso");
+});
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Algo salió mal");
 });
 
 app.listen(3000, () => console.log("Listening on port 3000 ..."));
