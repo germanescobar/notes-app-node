@@ -8,6 +8,7 @@ const logger = (req, res, next) => {
 
 app.set("view engine", "pug");
 app.set("views", "views");
+app.use(express.urlencoded());
 app.use("/static", express.static("public"));
 app.use(logger);
 
@@ -19,6 +20,15 @@ app.get("/", (req, res) => {
     "Nota 1", "Nota 2", "Nota 3"
   ];
   res.render("index", { notes });
+});
+
+app.get("/notes/new", (req, res) => {
+  res.render("new");
+});
+
+app.post("/notes", (req, res) => {
+  console.log(req.body);
+  res.redirect("/");
 });
 
 app.get("/users/:name", (req, res) => {
