@@ -3,33 +3,12 @@ extends layout
 block content
   form(action="/notes", method="post")
     div
-      label(for="title") Título
+      div
+        label(for="title") Título
       input(type="text", id="title" name="title")
-    
     div
-      label(for="password") Contraseña
-      input(type="password", id="password", name="password")
-      
-    div
-      label(for="body") Texto
+      div
+        label(for="body") Texto
       textarea(id="body", name="body", rows="8")
-        
-    div
-      label(for="country") País
-      select(id="country", name="country")
-        option(value="CO") Colombia
-        option(value="MX") México
-        option(value="PE") Perú
-        option(value="CL") Chile
-    
-    div
-      input(type="radio", id="gender-male", name="gender", value="male", checked="true")
-      label(for="gender-male") Hombre
-      input(type="radio", id="gender-female", name="gender", value="female")
-      label(for="gender-female") Mujer    
-    
-    div
-      input(type="checkbox", id="terms", name="terms")
-      label(for="terms") Acepta los términos y condiciones
     
     button(type="submit") Enviar
