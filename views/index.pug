@@ -1,8 +1,16 @@
 extends layout
 
 block content
-  a(href="/notes/new") Nueva nota
-  each note in notes
-    div
-      h3 #{note._id} - #{note.title}
-      p= note.body
+  div(class="container expand")
+    div(class="list expand")
+      div(class="list-header")
+        a(href="/notes/new")
+          i(class="far fa-sticky-note")
+          |
+          | New Note
+      each note in notes
+        a(href="/notes/" + note._id class="note" + (currentNote && currentNote._id.equals(note._id) ? " active" : ""))
+          div(class="note-title")= note.title
+          div(class="note-body")= note.truncateBody()
+    div(class="body")
+      block body

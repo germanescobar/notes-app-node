@@ -1,0 +1,152 @@
+* { box-sizing: border-box; }
+
+body {
+  background: #343438;
+  color: #cccccf;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.expand { height: 100%; }
+
+a {
+  color: #47bded;
+  text-decoration: none;
+}
+
+.container { display: flex; }
+
+.list {
+  width: 400px;
+  border-right: 2px solid #292929;
+  max-height: 100%;
+  overflow-y: scroll;
+}
+
+.list-header {
+  font-size: 0.95rem;
+  text-align: right;
+}
+
+.list-header, .note {
+  padding: 15px;
+  border-bottom: 2px solid #292929;
+}
+
+.note { display: block; }
+
+.note.active {
+  background: #26262a;
+}
+
+.note .note-title { margin-bottom: 5px; }
+
+.note .note-body {
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.body {
+  position: relative;
+  width: 100%;
+  padding-bottom: 80px;
+  max-height: 100%;
+  overflow-y: scroll;
+}
+
+.body .body-actions {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+}
+
+.body .body-actions a {
+  font-size: 18px;
+  padding: 15px;
+}
+
+.body .body-content {
+  min-width: 600px;
+  max-width: 800px;
+  padding: 30px 60px;
+}
+
+.body .body-title {
+  color: #47bded;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.body .body-text { line-height: 1.6; }
+
+.body .body-text h1,
+.body .body-text h2,
+.body .body-text h3,
+.body .body-text h4,
+.body .body-text h5,
+.body .body-text h6 {
+  color: #47bded;
+  margin: 1em 0 0.4em;
+}
+
+.body .body-text h1 { font-size: 1.4rem; }
+.body .body-text h2 { font-size: 1.3rem; }
+.body .body-text h3 { font-size: 1.2rem; }
+.body .body-text h4 { font-size: 1.1rem; }
+.body .body-text h5 { font-size: 1rem; }
+.body .body-text h6 { font-size: 0.9rem; }
+
+.body .body-text p { margin-bottom: 1rem; }
+
+.note-form-page {
+  width: 100%;
+  padding: 30px 60px;
+}
+
+.note-form-page form {
+  width: 100%;
+}
+
+.note-form-page input[type="text"], .note-form-page textarea {
+  background: rgba(0, 0, 0, 0);
+  border: none;
+  outline: none;
+  width: 100%;
+}
+
+.note-form-page #title {
+  color: #47bded;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+}
+
+.note-form-page #body {
+  color: #ccc;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.note-form-page .form-actions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: right;
+  margin-top: 45px;
+  border-top: 2px solid #292929;
+  padding: 10px 20px 15px;
+}
+
+.note-form-page .form-actions .btn {
+  background: #666;
+  color: white;
+  font-size: 0.95rem;
+  padding: 10px 20px;
+  border: none;
+  margin: 5px;
+}
+
+.note-form-page .form-actions .btn.btn-primary { background-color: #47bded; }

@@ -1,0 +1,26 @@
+extends index
+
+block body
+  div(class="body-actions")
+    a(href=`/notes/${currentNote._id}/edit`)
+      i(class="far fa-edit")
+    a(href="#", class="btn-delete")
+      i(class="far fa-trash-alt")
+
+  div(class="body-content")
+    h1(class="body-title")= currentNote.title
+    div(class="body-text")= currentNote.body
+
+  script.
+    var btnDelete = document.querySelector(".btn-delete");
+    btnDelete.addEventListener("click", function(e) {
+      e.preventDefault();
+
+      if (confirm("Are you sure to delete this note?")) {
+        fetch("/notes/#{currentNote._id}", {
+          method: "DELETE"
+        }).then(response => {
+          window.location= "/";
+        });
+      }
+    });
