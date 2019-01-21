@@ -9,7 +9,7 @@ block body
 
   div(class="body-content")
     h1(class="body-title")= currentNote.title
-    div(class="body-text")= currentNote.body
+    div(class="body-text") !{md(currentNote.body || "")}
 
   script.
     var btnDelete = document.querySelector(".btn-delete");

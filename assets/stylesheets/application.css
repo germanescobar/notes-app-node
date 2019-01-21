@@ -1,5 +1,7 @@
 * { box-sizing: border-box; }
 
+strong { font-weight: bold; }
+
 body {
   background: #343438;
   color: #cccccf;
