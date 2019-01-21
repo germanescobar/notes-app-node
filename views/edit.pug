@@ -1,0 +1,42 @@
+extends index
+
+block body
+  div(class="note-form-page")
+    form(action=`/notes/${currentNote._id}`, method="patch")
+      div
+        input(type="text", id="title", name="title", value=currentNote.title placeholder="Escribe el título", autocomplete="off" autofocus)
+      div
+        textarea(id="body", name="body", rows="8", placeholder="Escribe el texto ...")= currentNote.body
+
+      div(class="form-actions")
+        a(href=`/notes/${currentNote._id}`, class="btn") Cancel
+        button(type="submit", class="btn btn-primary") Update Note
+
+  script.
+    var textarea = document.getElementById("body");
+    var heightLimit = "innerHeight" in window  ? window.innerHeight : document.documentElement.offsetHeight;
+    heightLimit -= 180;
+
+    function adjustHeight() {
+      textarea.style.height = ""; // Reset the height
+      textarea.style.height = Math.min(textarea.scrollHeight, heightLimit) + "px";
+    }
+
+    textarea.oninput = adjustHeight;
+    adjustHeight();
+
+    var form = document.querySelector("form");
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      var title = document.querySelector("#title").value
+      var body = document.querySelector("#body").value
+
+      fetch("/notes/#{currentNote._id}", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `title=${title}&body=${body}`
+      }).then(response => {
+        window.location= "/notes/#{currentNote._id}";
+      });
+    });
