@@ -5,7 +5,7 @@ const NoteSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
-  title: { type: String, required: true },
+  title: { type: String, required: [true, "is required"] },
   body: String
 });
 NoteSchema.methods.truncateBody = function() {

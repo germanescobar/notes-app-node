@@ -7,6 +7,9 @@ block content
         | Login
       form(action="/login", method="post")
         div(class="card-body")
+          if error
+            div(class="alert alert-error")= error
+            
           div(class="form-group")
             label(for="email") Email
             input(type="text", id="email", name="email")

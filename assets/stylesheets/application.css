@@ -158,6 +158,35 @@ a {
 
 .note-form-page .form-actions .btn.btn-primary { background-color: #47bded; }
 
+.note-form-page form .form-group {
+  position: relative;
+}
+
+.note-form-page form .error {
+  position: absolute;
+  left: -30px;
+  top: 5px;
+}
+
+.note-form-page form .error .error-icon {
+  color: red;
+  font-size: 1.2rem;
+}
+
+.note-form-page form .error .error-text {
+  display: none;
+  background: #313135;
+  font-size: 0.95rem;
+  border: 2px solid #444;
+  border-radius: 5px;
+  padding: 7px 10px;
+  margin-top: 5px;
+}
+
+.note-form-page form .error .error-text.show {
+  display: block;
+}
+
 .auth-page {
   display: flex;
   justify-content: center;
@@ -205,6 +234,16 @@ a {
   outline: none;
 }
 
+.auth-page form .has-errors {
+  border-color: #e03d3a;
+}
+
+.auth-page form .error-text {
+  color: #e03d3a;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
 .auth-page .card-footer {
   display: flex;
   justify-content: space-between;
@@ -229,3 +268,15 @@ a {
 }
 
 .auth-page form .btn.btn-primary { background-color: #47bded; }
+
+.alert {
+  font-size: 0.95rem;
+  padding: 10px 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.alert-error {
+  background: #e03d3a;
+  color: white;
+}

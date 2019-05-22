@@ -64,11 +64,16 @@ app.post("/notes", requireUser, async (req, res, next) => {
   try {
     const note = new Note(data);
     await note.save();
-  } catch(e) {
-    return next(e);
-  }
 
-  res.redirect("/");
+    res.redirect("/");
+  } catch(err) {
+    if (err.name === "ValidationError") {
+      const notes = await Note.find({ user: res.locals.user });
+      res.render("new", { errors: err.errors, notes });
+    } else {
+      return next(err);
+    }
+  }
 });
 
 // muestra una nota
@@ -127,7 +132,11 @@ app.post("/register", async (req, res, next) => {
     });
     res.redirect("/login");
   } catch (err) {
-    return next(err);
+    if (err.name === "ValidationError") {
+      res.render("register", { errors: err.errors });
+    } else {
+      return next(err);
+    }
   }
 });
 
@@ -142,7 +151,7 @@ app.post("/login", async (req, res, next) => {
       req.session.userId = user._id;
       return res.redirect("/");
     } else {
-      res.render("/login", { error: "Wrong email or password. Try again!" });
+      res.render("login", { error: "Wrong email or password. Try again!" });
     }
   } catch (err) {
     return next(err);

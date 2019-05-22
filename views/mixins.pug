@@ -1,0 +1,3 @@
+mixin error(errors, field)
+  if errors && errors[field]
+    div(class="error-text")= errors[field].message

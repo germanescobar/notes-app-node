@@ -3,8 +3,12 @@ extends index
 block body
   div(class="note-form-page")
     form(action="/notes", method="post")
-      div
+      div(class="form-group")
         input(type="text", id="title", name="title", placeholder="Escribe el título", autocomplete="off" autofocus)
+        if errors && errors.title
+          div(class="error")
+            i(class="fas fa-exclamation-triangle error-icon")
+            div(class="error-text")= errors.title.message
       div
         textarea(id="body", name="body", rows="8", placeholder="Escribe el texto ...")
 
@@ -20,3 +24,14 @@ block body
       textarea.style.height = ""; /* Reset the height*/
       textarea.style.height = Math.min(textarea.scrollHeight, heightLimit) + "px";
     };
+
+    var errorIcon = document.querySelector(".error-icon");
+    errorIcon.addEventListener("mouseover", function() {
+      var errorText = document.querySelector(".error-text");
+      errorText.classList.add("show");
+    });
+    
+    errorIcon.addEventListener("mouseout", function() {
+      var errorText = document.querySelector(".error-text");
+      errorText.classList.remove("show");
+    });

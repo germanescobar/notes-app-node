@@ -1,6 +1,8 @@
 extends layout
 
 block content
+  include mixins
+  
   div(class="auth-page expand")
     div(class="card")
       div(class="card-header")
@@ -9,10 +11,12 @@ block content
         div(class="card-body")
           div(class="form-group")
             label(for="email") Email
-            input(type="text", id="email", name="email")
+            input(type="text", id="email", name="email" class=errors && errors.email ? "has-errors" : "")
+            +error(errors, "email")
           div(class="form-group")
             label(for="password") Password
-            input(type="password", name="password")
+            input(type="password", name="password" class=errors && errors.password ? "has-errors" : "")
+            +error(errors, "password")
             
         div(class="card-footer")
           div(class="small")
