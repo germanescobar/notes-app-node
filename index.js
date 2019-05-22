@@ -1,14 +1,25 @@
+require('dotenv').config();
+const aws = require('aws-sdk');
 const express = require("express");
 const mongoose = require("mongoose");
 const Note = require("./models/Note");
 const User = require("./models/User");
 const cookieSession = require("cookie-session")
 const md = require("marked");
+const multer  = require('multer');
+const multerS3 = require('multer-s3')
 const PORT = process.env.PORT || 3000;
 
 const app = express();
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/notes", { useNewUrlParser: true });
+var s3 = new aws.S3({
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_ID,
+    secretAccessKey: process.env.AWS_SECRET_KEY,
+  },
+  region: "us-west-2"
+})
 
 app.set("view engine", "pug");
 app.set("views", "views");
@@ -18,6 +29,21 @@ app.use(cookieSession({
   maxAge: 24 * 60 * 60 * 1000
 }));
 app.use("/assets", express.static("assets"));
+app.use("/uploads", express.static("uploads"));
+
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: 'notes-prod',
+    acl: "public-read",
+    metadata: function (req, file, cb) {
+      cb(null, {fieldName: file.fieldname});
+    },
+    key: function (req, file, cb) {
+      cb(null, Date.now().toString())
+    }
+  })
+});
 
 const requireUser = (req, res, next) => {
   if (!res.locals.user) {
@@ -54,11 +80,12 @@ app.get("/notes/new", requireUser, async (req, res) => {
 });
 
 // permite crear una nota
-app.post("/notes", requireUser, async (req, res, next) => {
+app.post("/notes", requireUser, upload.single('image'), async (req, res, next) => {
   const data = {
     title: req.body.title,
     body: req.body.body,
-    user: res.locals.user
+    user: res.locals.user,
+    image: req.file.location
   };
 
   try {

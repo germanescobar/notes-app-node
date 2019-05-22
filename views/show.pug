@@ -1,15 +1,18 @@
 extends index
 
 block body
-  div(class="body-actions")
-    a(href=`/notes/${currentNote._id}/edit`)
-      i(class="far fa-edit")
-    a(href="#", class="btn-delete")
-      i(class="far fa-trash-alt")
+  div(class="note-page")
+    div(class="body-actions")
+      a(href=`/notes/${currentNote._id}/edit`)
+        i(class="far fa-edit")
+      a(href="#", class="btn-delete")
+        i(class="far fa-trash-alt")
 
-  div(class="body-content")
-    h1(class="body-title")= currentNote.title
-    div(class="body-text") !{md(currentNote.body || "")}
+    div(class="body-content")
+      h1(class="body-title")= currentNote.title
+      if currentNote.image
+        img(src=currentNote.image)
+      div(class="body-text") !{md(currentNote.body || "")}
 
   script.
     var btnDelete = document.querySelector(".btn-delete");

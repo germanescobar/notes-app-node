@@ -187,6 +187,8 @@ a {
   display: block;
 }
 
+.note-page img { max-width: 100%; }
+
 .auth-page {
   display: flex;
   justify-content: center;

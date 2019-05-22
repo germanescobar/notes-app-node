@@ -6,7 +6,8 @@ const NoteSchema = mongoose.Schema({
     ref: 'User'
   },
   title: { type: String, required: [true, "is required"] },
-  body: String
+  body: String,
+  image: String
 });
 NoteSchema.methods.truncateBody = function() {
   if (this.body && this.body.length > 75) {

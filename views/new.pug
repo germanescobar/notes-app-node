@@ -2,13 +2,15 @@ extends index
 
 block body
   div(class="note-form-page")
-    form(action="/notes", method="post")
+    form(action="/notes", method="post" enctype="multipart/form-data")
       div(class="form-group")
         input(type="text", id="title", name="title", placeholder="Escribe el título", autocomplete="off" autofocus)
         if errors && errors.title
           div(class="error")
             i(class="fas fa-exclamation-triangle error-icon")
             div(class="error-text")= errors.title.message
+      div
+        input(type="file" name="image")
       div
         textarea(id="body", name="body", rows="8", placeholder="Escribe el texto ...")
 
