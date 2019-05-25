@@ -7,7 +7,8 @@ const User = require("./models/User");
 const cookieSession = require("cookie-session")
 const md = require("marked");
 const multer  = require('multer');
-const multerS3 = require('multer-s3')
+const multerS3 = require('multer-s3');
+const jwt = require('jsonwebtoken');
 const PORT = process.env.PORT || 3000;
 
 const app = express();
@@ -24,6 +25,7 @@ var s3 = new aws.S3({
 app.set("view engine", "pug");
 app.set("views", "views");
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cookieSession({
   secret: "una_cadena_secreta",
   maxAge: 24 * 60 * 60 * 1000
@@ -52,6 +54,28 @@ const requireUser = (req, res, next) => {
 
   next();
 };
+
+const requireApiUser = async (req, res, next) => {
+  const token = req.header("Authorization");
+
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+
+    const user = await User.findById(decoded.userId);
+    if (user) {
+      res.locals.user = user;
+      next();
+    } else {
+      res.status(401).send({ error: "Not authenticated" });
+    }
+  } catch (err) {
+    if (err.name === "JsonWebTokenError") {
+      res.status(401).send({ error: "Invalid token" });
+    } else {
+      return next(err);
+    }
+  }
+}
 
 app.use(async (req, res, next) => {
   const userId = req.session.userId;
@@ -191,5 +215,50 @@ app.get("/logout", requireUser, (req, res) => {
   res.clearCookie("session.sig");
   res.redirect("/login");
 });
+
+app.post("/api/auth", async (req, res, next) => {
+  try {
+    const user = await User.authenticate(req.body.email, req.body.password);
+    if (user) {
+      const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY);
+      res.json({ token });
+    } else {
+      res.status(401).send({ error: "Invalid username or password" });
+    }
+  } catch (err) {
+    return next(err);
+  }
+});
+
+app.get("/api/notes", requireApiUser, async (req, res, next) => {
+  try {
+    const notes = await Note.find({ user: res.locals.user });
+    res.json(notes);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+app.post("/api/notes", requireApiUser, async (req, res, next) => {
+  const data = {
+    title: req.body.title,
+    body: req.body.body,
+    user: res.locals.user
+  };
+
+  try {
+    const note = new Note(data);
+    await note.save();
+
+    res.json(note);
+  } catch (err) {
+    if (err.name === "ValidationError") {
+      res.status(422).json(err.errors);
+    } else {
+      return next(err);
+    }
+  }
+});
+
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT} ...`));
