@@ -22,3 +22,6 @@ block content
             | Don't have an account? 
             a(href="/register") Click here
           button(type="submit", class="btn btn-primary") Login
+          
+        div
+          a(href="https://github.com/login/oauth/authorize?client_id=" + process.env.OAUTH_CLIENT_ID + "&scope=user:email") Ingresar con Github

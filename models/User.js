@@ -41,7 +41,6 @@ schema.statics.authenticate = async (email, password) => {
         resolve(result === true ? user : null);
       });
     });
-    return user;
   }
 
   return null;

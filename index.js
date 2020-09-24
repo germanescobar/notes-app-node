@@ -9,6 +9,7 @@ const md = require("marked");
 const multer  = require('multer');
 const multerS3 = require('multer-s3');
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
 const PORT = process.env.PORT || 3000;
 
 const app = express();
@@ -104,7 +105,7 @@ app.get("/notes/new", requireUser, async (req, res) => {
 });
 
 // permite crear una nota
-app.post("/notes", requireUser, upload.single('image'), async (req, res, next) => {
+app.post("/notes", async (req, res, next) => {
   const data = {
     title: req.body.title,
     body: req.body.body,
@@ -215,6 +216,41 @@ app.get("/logout", requireUser, (req, res) => {
   res.clearCookie("session.sig");
   res.redirect("/login");
 });
+
+app.get("/auth/github/callback", async (req, res, next) => {
+  const code = req.query.code;
+
+  try {
+    // pedir el token a Github
+    let response = await axios.post("https://github.com/login/oauth/access_token", {
+      client_id: process.env.OAUTH_CLIENT_ID,
+      client_secret: process.env.OAUTH_CLIENT_SECRET,
+      code: code
+    }, { headers: { "Accept": "application/json" } });
+
+    const token = response.data.access_token;
+
+    // pedir el email del usuario
+    response = await axios.get("https://api.github.com/user/emails?access_token=" + token);
+
+    // crear o autenticar el usuario
+    const email = response.data[0].email;
+
+    let user = await User.findOne({ email: email });
+    if (!user) {
+      user = await User.create({
+        email: email,
+        password: "secret"
+      });
+    }
+
+    req.session.userId = user._id;
+    res.redirect("/");
+  } catch (err) {
+    return next(err);
+  }
+
+})
 
 app.post("/api/auth", async (req, res, next) => {
   try {
